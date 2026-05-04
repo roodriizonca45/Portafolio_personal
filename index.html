@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rodrigo Angel Zonca Calise — Desarrollador de Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  cursor: none !important; 
+}
+
+:root {
+  --ink: #0a0f1e;
+  --ink-60: rgba(10,15,30,0.60);
+  --ink-30: rgba(10,15,30,0.30);
+  --ink-10: rgba(10,15,30,0.07);
+  --ink-05: rgba(10,15,30,0.04);
+  --gold: #c9a84c;
+  --gold-light: #f5ecd2;
+  --white: #ffffff;
+  --page: #fafaf8;
+  --rule: rgba(10,15,30,0.10);
+  --radius: 4px;
+  --radius-lg: 10px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  line-height: 1.75;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── CURSOR ─── */
+#cursor {
+  width: 10px; height: 10px;
+  background: var(--ink);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s, width 0.2s, height 0.2s, background 0.2s;
+  transform: translate(-50%, -50%);
+}
+#cursor.big {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4rem;
+  height: 72px;
+  background: rgba(250,250,248,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-menu { display: flex; gap: 2.5rem; list-style: none; }
+.nav-menu a {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-60);
+  transition: color 0.2s;
+}
+.nav-menu a:hover { color: var(--ink); }
+.nav-cta {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 0.5rem 1.25rem;
+  border-radius: 2px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--ink); color: var(--white); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 72px;
+}
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 7rem 5rem 6rem 5rem;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+.hero-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px; height: 1px;
+  background: var(--gold);
+}
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(3.2rem, 5vw, 5rem);
+  line-height: 1.06;
+  color: var(--ink);
+  margin-bottom: 2rem;
+}
+.hero-h1 em { font-style: italic; color: var(--gold); }
+.hero-desc {
+  font-size: 0.95rem;
+  color: var(--ink-60);
+  max-width: 380px;
+  margin-bottom: 3rem;
+  line-height: 1.8;
+}
+.hero-actions { display: flex; gap: 1rem; align-items: center; }
+.btn-dark {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--ink);
+  color: var(--white);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: 2px;
+  border: 1px solid var(--ink);
+  transition: background 0.2s, color 0.2s;
+}
+.btn-dark:hover { background: transparent; color: var(--ink); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--ink); }
+.btn-ghost svg { transition: transform 0.2s; }
+.btn-ghost:hover svg { transform: translateX(4px); }
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem; left: 5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.scroll-line {
+  width: 40px; height: 1px;
+  background: var(--ink-30);
+  position: relative; overflow: hidden;
+}
+.scroll-line::after {
+  content: '';
+  position: absolute; left: -100%; top: 0;
+  width: 100%; height: 100%;
+  background: var(--ink);
+  animation: slide 2s ease-in-out infinite;
+}
+@keyframes slide { 0% { left: -100%; } 50% { left: 0%; } 100% { left: 100%; } }
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 7rem 5rem 6rem;
+  gap: 2.5rem;
+}
+.hero-stat {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s forwards;
+}
+.hero-stat:nth-child(1) { animation-delay: 0.2s; }
+.hero-stat:nth-child(2) { animation-delay: 0.4s; }
+.hero-stat:nth-child(3) { animation-delay: 0.6s; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ink);
+}
+.hero-stat-num sup {
+  font-size: 1.5rem;
+  vertical-align: super;
+  color: var(--gold);
+}
+.hero-stat-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  margin-top: 0.25rem;
+}
+.available-pill {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: #f0faf4;
+  border: 1px solid #a7d9b8;
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #1a7a40;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.available-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ─── SECTION BASE ─── */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 5rem;
+}
+.section-full {
+  padding: 8rem 5rem;
+}
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 5rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2rem;
+}
+.section-index {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+.section-h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  color: var(--ink);
+  line-height: 1.1;
+}
+.section-h2 em { font-style: italic; color: var(--gold); }
+
+/* ─── ABOUT ─── */
+#sobre-mi { border-bottom: 1px solid var(--rule); }
+.about-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 6rem;
+  align-items: start;
+}
+.about-text p {
+  color: var(--ink-60);
+  margin-bottom: 1.25rem;
+  font-size: 0.97rem;
+  line-height: 1.9;
+}
+.about-text p:last-child { margin-bottom: 0; }
+.about-meta { display: flex; flex-direction: column; gap: 0; }
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.meta-item:first-child { border-top: 1px solid var(--rule); }
+.meta-key {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+  margin-bottom: 0.3rem;
+}
+.meta-val {
+  font-size: 0.9rem;
+  color: var(--ink);
+  font-weight: 400;
+}
+.meta-val a { color: var(--gold); text-decoration: none; }
+.meta-val a:hover { text-decoration: underline; }
+
+/* ─── SKILLS ─── */
+#habilidades {
+  background: var(--ink);
+  color: var(--white);
+}
+#habilidades .section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5rem;
+}
+#habilidades .section-h2 { color: var(--white); }
+#habilidades .section-index { color: var(--gold); }
+#habilidades .section-header { border-bottom-color: rgba(255,255,255,0.1); }
+
+.skills-categories { display: flex; flex-direction: column; gap: 3.5rem; }
+.skill-category-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 1.25rem;
+}
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.skill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 2px;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.75);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.skill-pill:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,0.06);
+}
+.skill-level {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.skill-pill:hover .skill-level { opacity: 1; }
+
+/* ─── PROJECTS ─── */
+#proyectos { border-bottom: 1px solid var(--rule); }
+.projects-list { display: flex; flex-direction: column; gap: 0; }
+.project-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.2s;
+  position: relative;
+}
+.project-item:first-child { border-top: 1px solid var(--rule); }
+.project-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--rule);
+  text-align: right;
+  line-height: 1;
+  transition: color 0.3s;
+}
+.project-item:hover .project-num { color: var(--gold); }
+.project-info {}
+.project-tags { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+.project-tag-pill {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-light);
+  border-radius: 20px;
+  padding: 2px 10px;
+  background: var(--gold-light);
+}
+.project-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+.project-summary {
+  font-size: 0.88rem;
+  color: var(--ink-60);
+  max-width: 520px;
+  line-height: 1.7;
+}
+.project-stack-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: right;
+}
+.stack-item {
+  font-size: 0.75rem;
+  color: var(--ink-30);
+  letter-spacing: 0.06em;
+  font-weight: 400;
+}
+.project-arrow {
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  color: var(--gold);
+  font-size: 1.25rem;
+}
+.project-item:hover .project-arrow {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ─── CONTACT ─── */
+#contacto { border-bottom: 1px solid var(--rule); }
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+}
+.contact-lead {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 2rem;
+}
+.contact-lead em { font-style: italic; color: var(--gold); }
+.contact-links { display: flex; flex-direction: column; gap: 0; }
+.contact-link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: color 0.2s;
+}
+.contact-link-item:first-child { border-top: 1px solid var(--rule); }
+.contact-link-item:hover { color: var(--gold); }
+.clink-left {
+  display: flex; align-items: center; gap: 1rem;
+}
+.clink-type {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+  width: 80px;
+}
+.clink-val { font-size: 0.9rem; font-weight: 400; }
+.clink-arrow { font-size: 1rem; opacity: 0.3; transition: opacity 0.2s, transform 0.2s; }
+.contact-link-item:hover .clink-arrow { opacity: 1; transform: translate(4px, -4px); }
+
+.contact-form-side {}
+.form-row { display: flex; flex-direction: column; gap: 0; }
+.field {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--rule);
+  padding: 1.25rem 0;
+  position: relative;
+}
+.field:first-child { border-top: 1px solid var(--rule); }
+.field label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+  margin-bottom: 0.5rem;
+}
+.field input,
+.field textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  resize: none;
+  line-height: 1.6;
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--ink-30); }
+.field textarea { min-height: 100px; }
+.field::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.field:focus-within::after { width: 100%; }
+.field:focus-within label { color: var(--gold); }
+.form-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+.submit-note {
+  font-size: 0.78rem;
+  color: var(--ink-30);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 5rem;
+  border-top: 1px solid var(--rule);
+}
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--ink-30);
+  letter-spacing: 0.08em;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-60);
+}
+
+/* ─── ANIMATE ON SCROLL ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  nav { padding: 0 2rem; }
+  .nav-menu { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 5rem 2.5rem 4rem; border-right: none; border-bottom: 1px solid var(--rule); }
+  .hero-right { padding: 3rem 2.5rem 5rem; }
+  .section, #habilidades .section-inner { padding: 5rem 2.5rem; }
+  .section-full { padding: 5rem 2.5rem; }
+  .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .project-item { grid-template-columns: 50px 1fr; gap: 1.5rem; }
+  .project-stack-wrap { display: none; }
+  footer { padding: 1.5rem 2.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-wordmark" href="#">Rodrigo Angel Zonca</a>
+  <ul class="nav-menu">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#habilidades">Habilidades</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Contactarme</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="available-pill">
+      <span class="available-dot"></span>
+      Disponible para proyectos
+    </div>
+    <p class="hero-eyebrow">Desarrollador de Software</p>
+    <h1 class="hero-h1">
+      Construyo software<br>
+      que <em>importa.</em>
+    </h1>
+    <p class="hero-desc">
+      Especializado en arquitectura backend, APIs escalables y productos web de alta calidad. Combino rigor técnico con visión de producto.
+    </p>
+    <div class="hero-actions">
+      <a href="#proyectos" class="btn-dark">
+        Ver proyectos
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#contacto" class="btn-ghost">
+        Hablemos
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hero-stat-num">2<sup>+</sup></div>
+      <div class="hero-stat-label">Años de experiencia profesional</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">12</div>
+      <div class="hero-stat-label">Proyectos completados exitosamente</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">8</div>
+      <div class="hero-stat-label">Cursos y practicas </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE MÍ -->
+<section class="section" id="sobre-mi">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-index">01 — Sobre mí</div>
+      <h2 class="section-h2">La persona<br>detrás del <em>código</em></h2>
+    </div>
+  </div>
+  <div class="about-layout">
+    <div class="about-text reveal">
+      <p>
+        Soy un desarrollador de software con sólida experiencia en construir sistemas robustos y escalables. Me especializo en el diseño de arquitecturas backend, integración de APIs y desarrollo de productos web completos, siempre priorizando la calidad, la mantenibilidad y el impacto real en el usuario.
+      </p>
+      <p>
+        Mi enfoque es metódico: primero comprendo el problema a fondo, identifico los requisitos críticos y diseño una solución antes de escribir la primera línea de código. Creo firmemente que el software bien construido es una ventaja competitiva.
+      </p>
+      <p>
+        Trabajo cómodamente tanto de manera independiente como en equipos multidisciplinarios. Me adapto rápido a nuevas tecnologías y disfruto especialmente de los desafíos técnicos complejos donde la claridad de pensamiento hace la diferencia.
+      </p>
+    </div>
+    <div class="about-meta reveal">
+      <div class="meta-item">
+        <span class="meta-key">Ubicación</span>
+        <span class="meta-val">Mendoza, Argentina</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-key">Rol actual</span>
+        <span class="meta-val">Estudiante Avanzado en Ingenieria en Sistemas de Informacion-Desarrollador Full Stack</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-key">Disponibilidad</span>
+        <span class="meta-val" style="color: #1a7a40;">Freelance · Part-time</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-key">Idiomas</span>
+        <span class="meta-val">Español · Inglés (B2)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-key">Contacto</span>
+        <span class="meta-val"><a href="mailto:roodriizonca45@icloud.com">roodriizonca45@icloud.com</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HABILIDADES -->
+<section id="habilidades" class="section-full">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-index">02 — Habilidades</div>
+        <h2 class="section-h2">Stack<br><em>tecnológico</em></h2>
+      </div>
+    </div>
+    <div class="skills-categories reveal">
+      <div>
+        <div class="skill-category-title">Lenguajes &amp; Runtimes</div>
+        <div class="skills-row">
+          <div class="skill-pill"><span class="skill-level"></span>Python</div>
+          <div class="skill-pill"><span class="skill-level"></span>JavaScript / TypeScript</div>
+          <div class="skill-pill"><span class="skill-level"></span>SQL</div>
+          <div class="skill-pill"><span class="skill-level"></span>Bash / Shell</div>
+          <div class="skill-pill"><span class="skill-level"></span>Go (básico)</div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-category-title">Frameworks &amp; Librerías</div>
+        <div class="skills-row">
+          <div class="skill-pill"><span class="skill-level"></span>FastAPI</div>
+          <div class="skill-pill"><span class="skill-level"></span>Django / DRF</div>
+          <div class="skill-pill"><span class="skill-level"></span>Node.js / Express</div>
+          <div class="skill-pill"><span class="skill-level"></span>React</div>
+          <div class="skill-pill"><span class="skill-level"></span>Next.js</div>
+          <div class="skill-pill"><span class="skill-level"></span>Celery</div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-category-title">Infraestructura &amp; DevOps</div>
+        <div class="skills-row">
+          <div class="skill-pill"><span class="skill-level"></span>Docker / Compose</div>
+          <div class="skill-pill"><span class="skill-level"></span>AWS (EC2, S3, Lambda, RDS)</div>
+          <div class="skill-pill"><span class="skill-level"></span>PostgreSQL</div>
+          <div class="skill-pill"><span class="skill-level"></span>Redis</div>
+          <div class="skill-pill"><span class="skill-level"></span>GitHub Actions / CI-CD</div>
+          <div class="skill-pill"><span class="skill-level"></span>Nginx</div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-category-title">Prácticas &amp; Metodologías</div>
+        <div class="skills-row">
+          <div class="skill-pill"><span class="skill-level"></span>Arquitectura REST</div>
+          <div class="skill-pill"><span class="skill-level"></span>Diseño de sistemas</div>
+          <div class="skill-pill"><span class="skill-level"></span>Testing (unit, integration)</div>
+          <div class="skill-pill"><span class="skill-level"></span>Scrum / Agile</div>
+          <div class="skill-pill"><span class="skill-level"></span>Code review</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section class="section" id="proyectos">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-index">03 — Proyectos</div>
+      <h2 class="section-h2">Trabajo<br><em>selecto</em></h2>
+    </div>
+  </div>
+  <div class="projects-list">
+
+    <div class="project-item reveal">
+      <div class="project-num">01</div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag-pill">Web App</span>
+          <span class="project-tag-pill">E-commerce</span>
+        </div>
+        <h3 class="project-name">Plataforma de Economia innovadora (Econova) </h3>
+        <p class="project-summary">Plataforma web orientada al aprendizaje de economía universitaria, integrando módulos de matemática financiera, microeconomía y análisis cuantitativo. Diseñada con enfoque escalable, contempla gestión de contenidos educativos, interacción del usuario y estructura preparada para expansión hacia funcionalidades avanzadas como simulaciones económicas y análisis de datos.</p>
+      </div>
+      <div class="project-stack-wrap">
+        <span class="stack-item">JavaScript · HTML5</span>
+        <span class="stack-item">Prisma · PostgreSQL</span>
+        <span class="stack-item">Redis · Stripe API</span>
+        <span class="stack-item">Docker · Nodejs</span>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-item reveal">
+      <div class="project-num">02</div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag-pill">Dashboard</span>
+          <span class="project-tag-pill">Analytics</span>
+        </div>
+        <h3 class="project-name">Sistema de Detección de Mutantes (API REST)</h3>
+        <p class="project-summary">Sistema backend completo para detección de mutantes mediante análisis de secuencias de ADN, con procesamiento eficiente de matrices, persistencia en base de datos H2, endpoints REST documentados con Swagger y métricas estadísticas en tiempo real. Incluye arquitectura modular, manejo centralizado de errores y suite de tests unitarios para validación del sistema.</p>
+      </div>
+      <div class="project-stack-wrap">
+        <span class="stack-item">Java · Spring Boot</span>
+        <span class="stack-item">H2 Database · JPA/Hibernate</span>
+        <span class="stack-item">Swagger (OpenAPI) · JUnit · Gradle</span>
+        <span class="stack-item">AWS Lambda</span>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-item reveal">
+      <div class="project-num">03</div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag-pill">API REST</span>
+          <span class="project-tag-pill">Automatización</span>
+        </div>
+        <h3 class="project-name">IA Generativa de Personaje (LoRA / Stable Diffusion)</h3>
+        <p class="project-summary">Sistema de inteligencia artificial para generación de imágenes basado en modelos LoRA, entrenado sobre un dataset personalizado para crear un personaje consistente capaz de producir infinitas variaciones visuales. Permite control total sobre poses, iluminación, entorno y estilo, manteniendo identidad visual estable. Incluye pipeline completo desde preparación de datos hasta integración en motores de generación como Stable Diffusion</p>
+      </div>
+      <div class="project-stack-wrap">
+        <span class="stack-item">Python · PyTorch</span>
+        <span class="stack-item">Stable Diffusion · LoRA (kohya_ss)</span>
+        <span class="stack-item">Docker · Nginx</span>
+        <span class="stack-item">GitHub Actions · CUDA</span>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="section" id="contacto">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-index">04 — Contacto</div>
+      <h2 class="section-h2">Empecemos<br>a <em>trabajar</em></h2>
+    </div>
+  </div>
+  <div class="contact-layout">
+    <div class="reveal">
+      <p class="contact-lead">¿Tenés un proyecto complejo que resolver? <em>Hablemos.</em></p>
+      <div class="contact-links">
+        <a href="mailto:roodriizonca45@icloud.com" class="contact-link-item">
+          <div class="clink-left">
+            <span class="clink-type">Email</span>
+            <span class="clink-val">Mi email</span>
+          </div>
+          <span class="clink-arrow">↗</span>
+        </a>
+        <a href="https://www.linkedin.com/in/rodrigo-angel-zonca-514438350/" target="_blank" class="contact-link-item">
+          <div class="clink-left">
+            <span class="clink-type">LinkedIn</span>
+            <span class="clink-val">Mi perfil</span>
+          </div>
+          <span class="clink-arrow">↗</span>
+        </a>
+        <a href="https://github.com/roodriizonca45" target="_blank" class="contact-link-item">
+          <div class="clink-left">
+            <span class="clink-type">GitHub</span>
+            <span class="clink-val">GitHub personal</span>
+          </div>
+          <span class="clink-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form-side reveal">
+      <div class="form-row">
+        <div class="field">
+          <label>Nombre completo</label>
+          <input type="text" placeholder="Ej: María García">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="maria@empresa.com">
+        </div>
+        <div class="field">
+          <label>Mensaje</label>
+          <textarea placeholder="Contame brevemente sobre tu proyecto o propuesta..."></textarea>
+        </div>
+      </div>
+      <div class="form-submit-row">
+        <span class="submit-note">Respondo en menos de 48 h.</span>
+        <a href="mailto:roodriizonca45@icloud.com" class="btn-dark">Enviar mensaje ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2025 Rodrigo Angel Zonca. Todos los derechos reservados.</span>
+  <span class="footer-brand">Rodrigo Zonca — Dev</span>
+  <span class="footer-copy">Hecho con cuidado en Argentina 🇦🇷</span>
+</footer>
+
+<script>
+/* Cursor */
+const cur = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .project-item, .skill-pill').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('big'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
+
+/* Reveal on scroll */
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => obs.observe(el));
+
+/* Nav active on scroll */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-menu a');
+window.addEventListener('scroll', () => {
+  let cur_sec = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) cur_sec = sec.id;
+  });
+  navLinks.forEach(link => {
+    link.style.color = link.getAttribute('href') === '#' + cur_sec
+      ? 'var(--ink)' : '';
+  });
+});
+</script>
+</body>
+</html>
